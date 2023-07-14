@@ -15,6 +15,25 @@ class UserController {
         }
     }
 
+    static async getUserById(req, res) {
+        const { id } = req.params;
+        try {
+            const users = JSON.parse(fs.readFileSync("db.json"));
+            const userByIdList = users.filter(user => user.id === Number(id));
+
+            if (userByIdList.length < 1) {
+                res.send('id não existente')
+            } else if (id && Number(id)) {
+                const userById = userByIdList[0];
+                res.send(userById);
+            } else {
+                res.status(422).send('id inválido')
+            }
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao procurar usuario por id`);
+        }
+    }
+
     static async createUser(req, res) {
         const newUser = req.body;
         try {
