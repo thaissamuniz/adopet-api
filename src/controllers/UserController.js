@@ -65,6 +65,19 @@ class UserController {
             res.status(500).send(`${error.message} - erro ao atualizar usuario`);
         }
     }
+
+    static async deleteUser(req, res) {
+        const { id } = req.params;
+
+        try {
+            let users = JSON.parse(fs.readFileSync("db.json"));
+            const updatedData = users.filter(user => user.id !== Number(id));
+            fs.writeFileSync("db.json", JSON.stringify(updatedData));
+            res.send('usuario deletado com sucesso')
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao deletar usuario`);
+        }
+    }
 }
 
 module.exports = UserController;
