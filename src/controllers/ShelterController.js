@@ -43,7 +43,7 @@ class ShelterController {
                 fs.writeFileSync("shelter.json", JSON.stringify(sheltersUpdated));
                 res.status(201).json(newShelter)
             } else {
-                res.status(422).send('os campos nome,id , email e senha são obrigatórios.');
+                res.status(422).send('os campos id, nome, telefone, cidade e estado são obrigatórios.');
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
