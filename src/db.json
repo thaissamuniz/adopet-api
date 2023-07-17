@@ -1,1 +1,29 @@
-[{"id":4,"email":"antony@gmail.com","nome":"Antony de Marques","senha":"512814","telefone":"21 97774-4444","cidade":"Curitiba","sobre":""},{"id":5,"email":"thaissa@gmail.com","nome":"Thaissa Muniz","senha":"12345","telefone":"21 99999-9999","cidade":"Rio de Janeiro","sobre":""},{"id":6,"email":"manuella@gmail.com","nome":"manu clinford","senha":"512814","telefone":"21 97774-4456","cidade":"Florianopolis","sobre":""}]
+[
+    {
+        "id": 4,
+        "email": "antony@gmail.com",
+        "nome": "Antony de Marques",
+        "senha": "512814",
+        "telefone": "21 97774-4444",
+        "cidade": "Curitiba",
+        "sobre": ""
+    },
+    {
+        "id": 5,
+        "email": "thaissa@gmail.com",
+        "nome": "Thaissa Muniz",
+        "senha": "12345",
+        "telefone": "21 99999-9999",
+        "cidade": "Rio de Janeiro",
+        "sobre": ""
+    },
+    {
+        "id": 6,
+        "email": "manuella@gmail.com",
+        "nome": "manu clinford",
+        "senha": "512814",
+        "telefone": "21 97774-4456",
+        "cidade": "Florianopolis",
+        "sobre": ""
+    }
+]
