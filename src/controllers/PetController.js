@@ -1,5 +1,19 @@
 const fs = require('fs');
+const Adoption = require('../models/Adoption');
+const Pet = require('../models/Pet');
 
+const defineId = (lista) => {
+    let id;
+
+    if (lista.length > 0) {
+        let ultimoId = Number(lista[lista.length - 1].id);
+        id = ultimoId + 1;
+    } else {
+        id = 1;
+    }
+
+    return id;
+}
 
 class PetController {
     static async getPets(req, res) {
@@ -37,9 +51,11 @@ class PetController {
     static async createPet(req, res) {
         const newPet = req.body;
         try {
-            if (newPet.nome && newPet.id) {
+            if (newPet.nome) {
                 const pets = JSON.parse(fs.readFileSync("pets.json"));
-                const petsUpdated = [...pets, newPet]
+                let petId = newPet.id = defineId(pets)
+                const pet = new Pet(petId, newPet.nome, newPet.descricao, newPet.adotado, newPet.idade, newPet.porte, newPet.cidade, newPet.estado, '...')
+                const petsUpdated = [...pets, pet]
                 fs.writeFileSync("pets.json", JSON.stringify(petsUpdated));
                 res.status(201).json(newPet);
             } else {
@@ -59,6 +75,17 @@ class PetController {
             const targetIdIndex = pets.findIndex(pet => pet.id === Number(id));
             const updated = { ...pets[targetIdIndex], ...updatedData };
             pets[targetIdIndex] = updated;
+
+            if (updated.adotado == true) {
+
+                const adocoesExistentes = JSON.parse(fs.readFileSync("adoption.json"));
+                const novaAdocao = new Adoption(defineId(adocoesExistentes), id, 'qualquer');
+                const adocoesAtualizadas = [...adocoesExistentes, novaAdocao]
+                fs.writeFileSync("adoption.json", JSON.stringify(adocoesAtualizadas));
+
+            }
+
+
             fs.writeFileSync("pets.json", JSON.stringify(pets));
             res.status(200).json(updated)
         } catch (error) {
