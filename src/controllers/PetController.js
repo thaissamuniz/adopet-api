@@ -29,6 +29,16 @@ class PetController {
         }
     }
 
+    static async getAvailablePets(req, res) {
+        try {
+            const pets = JSON.parse(fs.readFileSync("pets.json"));
+            const availablePets = pets.filter(pet => pet.adotado !== true);
+            res.send(availablePets);
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao recuperar os dados`);
+        }
+    }
+
     static async getPetById(req, res) {
         const { id } = req.params;
         try {
