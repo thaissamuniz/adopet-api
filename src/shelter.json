@@ -1,1 +1,10 @@
-[{"id":2,"email":"amigoanimal@gmail.com","nome":"Amigo Animal","telefone":"21 97774-4444","cidade":"São Paulo","estado":"SP"}]
+[
+    {
+        "id": 2,
+        "email": "amigoanimal@gmail.com",
+        "nome": "Amigo Animal",
+        "telefone": "21 97774-4444",
+        "cidade": "São Paulo",
+        "estado": "SP"
+    }
+]
