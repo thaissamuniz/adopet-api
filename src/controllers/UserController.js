@@ -1,9 +1,11 @@
 const users = require('../models/User');
+const UsersServices = require('../services/UsersServices');
+const usersServices = new UsersServices();
 
 class UserController {
     static async getUsers(req, res) {
         try {
-            const result = await users.find();
+            const result = await usersServices.getAllDatas();
 
             if (result.length == 0) {
                 res.send('nenhum usuario cadastrado.');
@@ -18,7 +20,7 @@ class UserController {
     static async getUserById(req, res) {
         try {
             const { id } = req.params;
-            const user = await users.findById(id).exec();
+            const user = await usersServices.getDataById(id);
             if (user !== null) {
                 res.status(200).send(user);
             } else {
@@ -31,8 +33,7 @@ class UserController {
 
     static async createUser(req, res) {
         try {
-            let user = new users(req.body);
-            const userResult = await user.save();
+            const userResult = await usersServices.createData(req.body);
             res.status(201).send(userResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -43,7 +44,7 @@ class UserController {
 
         try {
             const { id } = req.params;
-            let user = await users.findByIdAndUpdate(id, { $set: req.body });
+            let user = await usersServices.updateData(id, req.body);
             if (user !== null) {
                 res.status(200).send('usuario atualizado com sucesso.');
             } else {
@@ -59,7 +60,7 @@ class UserController {
 
         try {
             const { id } = req.params;
-            const user = await users.findByIdAndDelete(id);
+            const user = await usersServices.deleteData(id);
             if (user !== null) {
                 res.status(200).send({ message: 'usuario apagadp com sucesso.' });
             } else {
