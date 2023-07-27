@@ -1,4 +1,4 @@
-// const Adoption = require('../models/Adoption');
+const adoptions = require('../models/Adoption');
 const pets = require('../models/Pet.js');
 
 class PetController {
@@ -15,15 +15,18 @@ class PetController {
         }
     }
 
-    // static async getAvailablePets(req, res) {
-    //     try {
-    //         const pets = JSON.parse(fs.readFileSync("pets.json"));
-    //         const availablePets = pets.filter(pet => pet.adotado !== true);
-    //         res.send(availablePets);
-    //     } catch (error) {
-    //         res.status(500).send(`${error.message} - erro ao recuperar os dados`);
-    //     }
-    // }
+    static async getAvailablePets(req, res) {
+        try {
+            const result = await pets.find({ adopted: false }).exec();
+            if (result.length == 0) {
+                res.send('não há animais disponiveis para adoção.')
+            } else if (result !== null) {
+                res.status(200).json(result);
+            }
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao recuperar os dados`);
+        }
+    }
 
     static async getPetById(req, res) {
         try {
@@ -51,32 +54,25 @@ class PetController {
         }
     }
 
-    // static async updatePet(req, res) {
-    //     const { id } = req.params;
-    //     const updatedData = req.body;
 
-    //     try {
-    //         let pets = JSON.parse(fs.readFileSync("pets.json"));
-    //         const targetIdIndex = pets.findIndex(pet => pet.id === Number(id));
-    //         const updated = { ...pets[targetIdIndex], ...updatedData };
-    //         pets[targetIdIndex] = updated;
+    static async updatePet(req, res) {
+        try {
+            const { id } = req.params;
+            const updatedData = await pets.findByIdAndUpdate(id, { $set: req.body });
+            if (updatedData !== null) {
+                if (req.body.adopted == true) {
+                    const adoption = new adoptions({ pet: id, user: "64c0134e556c5354ff41004e" });
+                    await adoption.save();
+                }
+                res.status(200).send({ message: 'animal atualizado com sucesso' })
+            } else {
+                res.send({ message: 'animal não localizado.' })
+            }
 
-    //         if (updated.adotado == true) {
-
-    //             const adocoesExistentes = JSON.parse(fs.readFileSync("adoption.json"));
-    //             const novaAdocao = new Adoption(defineId(adocoesExistentes), id, 'qualquer');
-    //             const adocoesAtualizadas = [...adocoesExistentes, novaAdocao]
-    //             fs.writeFileSync("adoption.json", JSON.stringify(adocoesAtualizadas));
-
-    //         }
-
-
-    //         fs.writeFileSync("pets.json", JSON.stringify(pets));
-    //         res.status(200).json(updated)
-    //     } catch (error) {
-    //         res.status(500).send(`${error.message} - erro ao atualizar animal`);
-    //     }
-    // }
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao atualizar animal`);
+        }
+    }
 
     static async deletePet(req, res) {
         try {

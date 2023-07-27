@@ -1,28 +1,13 @@
-const fs = require('fs');
-const Adoption = require('../models/Adoption');
-
-const defineId = (lista) => {
-    let id;
-
-    if (lista.length > 0) {
-        let ultimoId = Number(lista[lista.length - 1].id);
-        id = ultimoId + 1;
-    } else {
-        id = 1;
-    }
-
-    return id;
-}
-
+const adoptions = require('../models/Adoption');
 
 class AdoptionController {
     static async getAdoptions(req, res) {
         try {
-            const adoptions = JSON.parse(fs.readFileSync("adoption.json"));
-            if (adoptions.length < 1) {
-                res.send('nenhum animal cadastrado')
-            } else {
-                res.send(adoptions)
+            const result = await adoptions.find().populate("pet", "name").populate("user").exec();
+            if (result.length == 0) {
+                res.status(422).send({ message: 'ainda não há adoções' });
+            } else if (result !== null) {
+                res.status(200).json(result);
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao recuperar os dados`);
@@ -30,32 +15,27 @@ class AdoptionController {
     }
 
     static async createAdoption(req, res) {
-        const adoptionInfos = req.body;
         try {
-            if (adoptionInfos) {
-                const existingAdoptions = JSON.parse(fs.readFileSync("adoption.json"));
-                const adoption = new Adoption(defineId(existingAdoptions), adoptionInfos.petId, 'qualquer')
-                const updatedAdoptions = [...existingAdoptions, adoption];
-                fs.writeFileSync("adoption.json", JSON.stringify(updatedAdoptions));
-                res.status(201).json(adoption);
-            } else {
-                res.status(422).send('os campos nome,id , email e senha são obrigatórios.');
-            }
+            const adoption = new adoptions(req.body);
+            const adoptionResult = await adoption.save();
+            res.status(201).send(adoptionResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
         }
     }
 
     static async deleteAdoption(req, res) {
-        const { id } = req.params;
 
         try {
-            let adoptions = JSON.parse(fs.readFileSync("adoption.json"));
-            const updatedData = adoptions.filter(adoption => adoption.id !== Number(id));
-            fs.writeFileSync("adoption.json", JSON.stringify(updatedData));
-            res.send('adoção deletada com sucesso');
+            const { id } = req.params;
+            const result = await adoptions.findByIdAndDelete(id);
+            if (result !== null) {
+                res.status(200).send({ message: 'adoção apagada com sucesso.' })
+            } else {
+                res.send('adoção não encontrada.')
+            }
         } catch (error) {
-            res.status(500).send(`${error.message} - erro ao deletar animal`);
+            res.status(500).send(`${error.message} - erro ao deletar adoção`);
         }
     }
 }
