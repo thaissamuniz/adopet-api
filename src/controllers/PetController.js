@@ -1,7 +1,8 @@
 const { pets } = require('../models');
-const adoptions = require('../models/Adoption');
+const AdoptionsServices = require('../services/AdoptionsServices');
 const PetsServices = require('../services/PetsServices');
 const petsServices = new PetsServices();
+const adoptionsServices = new AdoptionsServices();
 
 class PetController {
     static async getPets(req, res) {
@@ -62,8 +63,7 @@ class PetController {
             const updatedData = await petsServices.updateData(id, req.body);
             if (updatedData !== null) {
                 if (req.body.adopted == true) {
-                    const adoption = new adoptions({ pet: id, user: "64c0134e556c5354ff41004e" });
-                    await adoption.save();
+                    await adoptionsServices.createData({ pet: id, user: "64c0134e556c5354ff41004e" })
                 }
                 res.status(200).send({ message: 'animal atualizado com sucesso' })
             } else {
