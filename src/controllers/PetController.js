@@ -1,10 +1,12 @@
+const { pets } = require('../models');
 const adoptions = require('../models/Adoption');
-const pets = require('../models/Pet.js');
+const PetsServices = require('../services/PetsServices');
+const petsServices = new PetsServices();
 
 class PetController {
     static async getPets(req, res) {
         try {
-            const result = await pets.find();
+            const result = await petsServices.getAllDatas();
             if (result.length == 0) {
                 res.send('nenhum animal cadastrado');
             } else if (result !== null) {
@@ -17,7 +19,7 @@ class PetController {
 
     static async getAvailablePets(req, res) {
         try {
-            const result = await pets.find({ adopted: false }).exec();
+            const result = await petsServices.getAvailable();
             if (result.length == 0) {
                 res.send('não há animais disponiveis para adoção.')
             } else if (result !== null) {
@@ -46,8 +48,7 @@ class PetController {
 
     static async createPet(req, res) {
         try {
-            let pet = new pets(req.body);
-            const petResult = await pet.save();
+            const petResult = await petsServices.createData(req.body);
             res.status(201).send(petResult.toJSON())
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -58,7 +59,7 @@ class PetController {
     static async updatePet(req, res) {
         try {
             const { id } = req.params;
-            const updatedData = await pets.findByIdAndUpdate(id, { $set: req.body });
+            const updatedData = await petsServices.updateData(id, req.body);
             if (updatedData !== null) {
                 if (req.body.adopted == true) {
                     const adoption = new adoptions({ pet: id, user: "64c0134e556c5354ff41004e" });
@@ -77,7 +78,7 @@ class PetController {
     static async deletePet(req, res) {
         try {
             const { id } = req.params;
-            const pet = await pets.findByIdAndDelete(id);
+            const pet = await petsServices.deleteData(id);
             if (pet !== null) {
                 res.status(200).send({ message: 'animal apagado com sucesso.' });
             } else {
