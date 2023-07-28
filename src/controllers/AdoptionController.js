@@ -1,4 +1,6 @@
 const adoptions = require('../models/Adoption');
+const AdoptionsServices = require('../services/AdoptionsServices.js');
+const adoptionsServices = new AdoptionsServices();
 
 class AdoptionController {
     static async getAdoptions(req, res) {
@@ -16,8 +18,7 @@ class AdoptionController {
 
     static async createAdoption(req, res) {
         try {
-            const adoption = new adoptions(req.body);
-            const adoptionResult = await adoption.save();
+            const adoptionResult = await adoptionsServices.createData(req.body);
             res.status(201).send(adoptionResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -28,7 +29,7 @@ class AdoptionController {
 
         try {
             const { id } = req.params;
-            const result = await adoptions.findByIdAndDelete(id);
+            const result = await adoptionsServices.deleteData(id);
             if (result !== null) {
                 res.status(200).send({ message: 'adoção apagada com sucesso.' })
             } else {

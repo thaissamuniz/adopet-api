@@ -1,10 +1,10 @@
-const shelters = require('../models/Shelter');
-
+const ShelterServices = require('../services/SheltersServices.js');
+const sheltersServices = new ShelterServices();
 
 class ShelterController {
     static async getShelters(req, res) {
         try {
-            const result = await shelters.find()
+            const result = await sheltersServices.getAllDatas();
 
             if (result !== null) {
                 res.status(200).json(result)
@@ -19,7 +19,7 @@ class ShelterController {
         try {
             const { id } = req.params;
 
-            const shelter = await shelters.findById(id).exec();
+            const shelter = await sheltersServices.getDataById(id);
             if (shelter !== null) {
                 res.status(200).send(shelter);
             } else {
@@ -32,8 +32,7 @@ class ShelterController {
 
     static async createShelter(req, res) {
         try {
-            let shelter = new shelters(req.body);
-            const shelterResult = await shelter.save();
+            const shelterResult = await sheltersServices.createData(req.body)
             res.status(201).send(shelterResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -44,7 +43,7 @@ class ShelterController {
         try {
             const { id } = req.params;
 
-            let shelter = await shelters.findByIdAndUpdate(id, { $set: req.body });
+            let shelter = await sheltersServices.updateData(id, req.body);
             if (shelter !== null) {
                 res.status(200).send({ message: 'abrigo atualizado co sucesso' })
             } else {
@@ -59,7 +58,7 @@ class ShelterController {
         const { id } = req.params;
 
         try {
-            const shelter = await shelters.findByIdAndDelete(id);
+            const shelter = await sheltersServices.deleteData(id);
             if (shelter !== null) {
                 res.status(200).send({ message: 'abrigo apagado com sucesso.' });
             } else {
