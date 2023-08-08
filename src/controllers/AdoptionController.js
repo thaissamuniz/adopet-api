@@ -1,11 +1,12 @@
-const adoptions = require('../models/Adoption');
-const AdoptionsServices = require('../services/AdoptionsServices.js');
-const adoptionsServices = new AdoptionsServices();
+const { adoptions } = require('../models');
+const AdoptionsService = require('../services/AdoptionsServices.js');
+
+const adoptionsService = AdoptionsService.getInstance(adoptions);
 
 class AdoptionController {
     static async getAdoptions(req, res) {
         try {
-            const result = await adoptions.find().populate("pet", "name").populate("user").exec();
+            const result = await adoptionsService.getAllAdoptions();
             if (result.length == 0) {
                 res.status(422).send({ message: 'ainda não há adoções' });
             } else if (result !== null) {
@@ -18,7 +19,7 @@ class AdoptionController {
 
     static async createAdoption(req, res) {
         try {
-            const adoptionResult = await adoptionsServices.createData(req.body);
+            const adoptionResult = await adoptionsService.createAdoption(req.body);
             res.status(201).send(adoptionResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -29,7 +30,7 @@ class AdoptionController {
 
         try {
             const { id } = req.params;
-            const result = await adoptionsServices.deleteData(id);
+            const result = await adoptionsService.deleteAdoption(id);
             if (result !== null) {
                 res.status(200).send({ message: 'adoção apagada com sucesso.' })
             } else {

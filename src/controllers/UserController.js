@@ -1,10 +1,11 @@
-const UsersServices = require('../services/UsersServices');
-const usersServices = new UsersServices();
+const { users } = require('../models');
+const UsersService = require('../services/UsersServices');
+const usersService = UsersService.getInstance(users);
 
 class UserController {
     static async getUsers(req, res) {
         try {
-            const result = await usersServices.getAllDatas();
+            const result = await usersService.getAllUsers();
 
             if (result.length == 0) {
                 res.send('nenhum usuario cadastrado.');
@@ -19,7 +20,7 @@ class UserController {
     static async getUserById(req, res) {
         try {
             const { id } = req.params;
-            const user = await usersServices.getDataById(id);
+            const user = await usersService.getUserById(id);
             if (user !== null) {
                 res.status(200).send(user);
             } else {
@@ -32,7 +33,7 @@ class UserController {
 
     static async createUser(req, res) {
         try {
-            const userResult = await usersServices.createData(req.body);
+            const userResult = await usersService.createUser(req.body);
             res.status(201).send(userResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -43,7 +44,7 @@ class UserController {
 
         try {
             const { id } = req.params;
-            let user = await usersServices.updateData(id, req.body);
+            let user = await usersService.updateUser(id, req.body);
             if (user !== null) {
                 res.status(200).send('usuario atualizado com sucesso.');
             } else {
@@ -59,7 +60,7 @@ class UserController {
 
         try {
             const { id } = req.params;
-            const user = await usersServices.deleteData(id);
+            const user = await usersService.deleteUser(id);
             if (user !== null) {
                 res.status(200).send({ message: 'usuario apagadp com sucesso.' });
             } else {

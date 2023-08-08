@@ -1,29 +1,28 @@
-class Services {
+class CRUD {
     constructor(model) {
         this.model = model;
     }
 
-    async getAllDatas() {
+    getAllDatas() {
         return this.model.find();
     }
 
-    async getDataById(id) {
+    getDataById(id) {
         return this.model.findById(id).exec();
-
     }
 
-    async createData(datas) {
+    createData(datas) {
         let data = new this.model(datas);
         return data.save();
     }
 
-    async updateData(id, datas) {
+    updateData(id, datas) {
         return this.model.findByIdAndUpdate(id, { $set: datas });
     }
 
-    async deleteData(id) {
+    deleteData(id) {
         return this.model.findByIdAndDelete(id);
     }
 }
 
-module.exports = Services;
+module.exports = CRUD;

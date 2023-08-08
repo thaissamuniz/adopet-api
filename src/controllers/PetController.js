@@ -1,13 +1,14 @@
-const { pets } = require('../models');
+const { pets, adoptions } = require('../models');
 const AdoptionsServices = require('../services/AdoptionsServices');
-const PetsServices = require('../services/PetsServices');
-const petsServices = new PetsServices();
-const adoptionsServices = new AdoptionsServices();
+const PetsService = require('../services/PetsServices');
+
+const adoptionsService = AdoptionsServices.getInstance(adoptions);
+const petsService = PetsService.getInstance(pets);
 
 class PetController {
     static async getPets(req, res) {
         try {
-            const result = await petsServices.getAllDatas();
+            const result = await petsService.getAllPets();
             if (result.length == 0) {
                 res.send('nenhum animal cadastrado');
             } else if (result !== null) {
@@ -20,7 +21,7 @@ class PetController {
 
     static async getAvailablePets(req, res) {
         try {
-            const result = await petsServices.getAvailable();
+            const result = await petsService.getAvailable();
             if (result.length == 0) {
                 res.send('não há animais disponiveis para adoção.')
             } else if (result !== null) {
@@ -34,9 +35,7 @@ class PetController {
     static async getPetById(req, res) {
         try {
             const { id } = req.params;
-            const pet = await pets.findById(id)
-                .populate("shelter")
-                .exec();
+            const pet = await petsService.getPetById(id)
             if (pet !== null) {
                 res.status(200).send(pet)
             } else {
@@ -49,7 +48,7 @@ class PetController {
 
     static async createPet(req, res) {
         try {
-            const petResult = await petsServices.createData(req.body);
+            const petResult = await petsService.createPet(req.body);
             res.status(201).send(petResult.toJSON())
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -60,10 +59,10 @@ class PetController {
     static async updatePet(req, res) {
         try {
             const { id } = req.params;
-            const updatedData = await petsServices.updateData(id, req.body);
+            const updatedData = await petsService.updatePet(id, req.body);
             if (updatedData !== null) {
                 if (req.body.adopted == true) {
-                    await adoptionsServices.createData({ pet: id, user: "64c0134e556c5354ff41004e" })
+                    await adoptionsService.createAdoption({ pet: id, user: "64c0134e556c5354ff41004e" })
                 }
                 res.status(200).send({ message: 'animal atualizado com sucesso' })
             } else {
@@ -78,7 +77,7 @@ class PetController {
     static async deletePet(req, res) {
         try {
             const { id } = req.params;
-            const pet = await petsServices.deleteData(id);
+            const pet = await petsService.deletePet(id);
             if (pet !== null) {
                 res.status(200).send({ message: 'animal apagado com sucesso.' });
             } else {

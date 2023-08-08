@@ -1,10 +1,11 @@
+const shelters = require('../models/Shelter.js');
 const ShelterServices = require('../services/SheltersServices.js');
-const sheltersServices = new ShelterServices();
+const sheltersService = ShelterServices.getInstance(shelters);
 
 class ShelterController {
     static async getShelters(req, res) {
         try {
-            const result = await sheltersServices.getAllDatas();
+            const result = await sheltersService.getAllShelters();
 
             if (result !== null) {
                 res.status(200).json(result)
@@ -19,7 +20,7 @@ class ShelterController {
         try {
             const { id } = req.params;
 
-            const shelter = await sheltersServices.getDataById(id);
+            const shelter = await sheltersService.getShelterById(id);
             if (shelter !== null) {
                 res.status(200).send(shelter);
             } else {
@@ -32,7 +33,7 @@ class ShelterController {
 
     static async createShelter(req, res) {
         try {
-            const shelterResult = await sheltersServices.createData(req.body)
+            const shelterResult = await sheltersService.createShelter(req.body)
             res.status(201).send(shelterResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
@@ -43,7 +44,7 @@ class ShelterController {
         try {
             const { id } = req.params;
 
-            let shelter = await sheltersServices.updateData(id, req.body);
+            let shelter = await sheltersService.updateShelter(id, req.body);
             if (shelter !== null) {
                 res.status(200).send({ message: 'abrigo atualizado co sucesso' })
             } else {
@@ -58,7 +59,7 @@ class ShelterController {
         const { id } = req.params;
 
         try {
-            const shelter = await sheltersServices.deleteData(id);
+            const shelter = await sheltersService.deleteShelter(id);
             if (shelter !== null) {
                 res.status(200).send({ message: 'abrigo apagado com sucesso.' });
             } else {
