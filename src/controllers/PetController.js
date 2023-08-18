@@ -32,7 +32,7 @@ class PetController {
         }
     }
 
-    static async getPetById(req, res) {
+    static async getPetById(req, res, next) {
         try {
             const { id } = req.params;
             const pet = await petsService.getPetById(id)
@@ -42,16 +42,18 @@ class PetController {
                 res.status(422).send('animal não encontrado.')
             }
         } catch (error) {
-            res.status(500).send(`${error.message} - erro ao procurar animal por id`);
+            // res.status(500).send(`${error.message} - erro ao procurar animal por id`);
+            next(error)
         }
     }
 
-    static async createPet(req, res) {
+    static async createPet(req, res, next) {
         try {
             const petResult = await petsService.createPet(req.body);
             res.status(201).send(petResult.toJSON())
         } catch (error) {
-            res.status(500).send(`${error.message} - erro no post`);
+            // res.status(500).send(`${error.message} - erro no post`);
+            next(error)
         }
     }
 
