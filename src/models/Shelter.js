@@ -17,7 +17,11 @@ const shelterSchema = new mongoose.Schema(
                 },
                 message: 'formato de email inválido.'
             }
-
+        },
+        password: {
+            type: String,
+            required: [true, 'defina uma senha'],
+            minlength: [6, 'a senha deve conter pelo menos 6 caracteres']
         },
         tel: {
             type: String,
@@ -27,7 +31,6 @@ const shelterSchema = new mongoose.Schema(
                     return /^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})\-?(\d{4}))$/.test(tel)
                 }
             }
-
         },
         city: {
             type: String,
@@ -39,7 +42,6 @@ const shelterSchema = new mongoose.Schema(
             required: [true, 'estado é obrigatório'],
             maxlength: [2, 'digite apenas a sigla do estado']
         }
-
     }
 )
 

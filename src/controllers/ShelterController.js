@@ -1,5 +1,6 @@
 const shelters = require('../models/Shelter.js');
 const ShelterServices = require('../services/SheltersServices.js');
+const { hashPassword, checkEmail } = require('../services/Utils.js');
 const sheltersService = ShelterServices.getInstance(shelters);
 
 class ShelterController {
@@ -33,8 +34,16 @@ class ShelterController {
 
     static async createShelter(req, res) {
         try {
-            const shelterResult = await sheltersService.createShelter(req.body)
-            res.status(201).send(shelterResult.toJSON());
+            const { email, password } = req.body;
+            const emailAlreadyExists = await checkEmail(email, shelters);
+
+            if (emailAlreadyExists) {
+                res.status(401).send('email já cadastrado');
+            } else {
+                req.body.password = await hashPassword(password);
+                const shelterResult = await sheltersService.createShelter(req.body);
+                res.status(201).send(shelterResult.toJSON());
+            }
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
         }

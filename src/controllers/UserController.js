@@ -1,6 +1,6 @@
-const { hash, genSalt } = require('bcrypt');
 const { users } = require('../models');
 const UsersService = require('../services/UsersServices');
+const { checkEmail, hashPassword } = require('../services/Utils');
 const usersService = UsersService.getInstance(users);
 
 class UserController {
@@ -35,13 +35,12 @@ class UserController {
     static async createUser(req, res) {
         try {
             const { email, password } = req.body;
-            const emailCadastrado = await users.findOne({ email: email });
-            if (emailCadastrado) {
+            const emailAlreadyExists = await checkEmail(email, users)
+
+            if (emailAlreadyExists) {
                 res.status(401).send('email já cadastrado');
             } else {
-                const salt = await genSalt(12);
-                const passwordHash = await hash(password, salt);
-                req.body.password = passwordHash;
+                req.body.password = await hashPassword(password);
                 const userResult = await usersService.createUser(req.body);
                 res.status(201).send(userResult.toJSON());
             }

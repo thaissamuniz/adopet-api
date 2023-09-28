@@ -6,6 +6,10 @@ const { sign } = require('jsonwebtoken');
 
 class AuthService {
     static _instance;
+    static database;
+    // constructor(database) {
+    //     this.database = database;
+    // }
 
     static getInstance() {
         if (!AuthService._instance) {
@@ -15,8 +19,8 @@ class AuthService {
         return AuthService._instance;
     }
 
-    async login(email, password) {
-        const user = await users.findOne({ email: email });
+    async login(collection, email, password) {
+        const user = await collection.findOne({ email: email });
 
         const checkPassword = await bcrypt.compare(password, user.password);
 
