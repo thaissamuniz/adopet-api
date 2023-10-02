@@ -41,6 +41,12 @@ const shelterSchema = new mongoose.Schema(
             type: String,
             required: [true, 'estado é obrigatório'],
             maxlength: [2, 'digite apenas a sigla do estado']
+        },
+        role: {
+            type: String,
+            enum: ['user', 'admin', 'manager'],
+            ref: 'roles',
+            required: [true, 'defina uma role']
         }
     }
 )
