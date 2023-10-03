@@ -11,6 +11,10 @@ class CRUD {
         return this.model.findById(id).exec();
     }
 
+    getDataByType(accountType) {
+        return this.model.find({ "accountType": accountType });
+    }
+
     createData(datas) {
         let data = new this.model(datas);
         return data.save();

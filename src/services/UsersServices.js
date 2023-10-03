@@ -20,6 +20,10 @@ class UsersServices {
     getUserById(id) {
         return this.crud.getDataById(id);
     }
+    getUserByAccountType(accountType) {
+        return this.crud.getDataByType(accountType);
+    }
+
     createUser(user) {
         return this.crud.createData(user);
     }

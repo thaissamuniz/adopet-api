@@ -37,7 +37,7 @@ const petSchema = new mongoose.Schema({
     },
     shelter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'shelters',
+        ref: 'users',
         required: [true, 'o abrigo é obrigatório']
     }
 

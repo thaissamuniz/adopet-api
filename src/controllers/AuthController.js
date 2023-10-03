@@ -1,4 +1,4 @@
-const shelters = require('../models/Shelter.js');
+// const shelters = require('../models/Shelter.js');
 const users = require('../models/User.js');
 const AuthService = require('../services/AuthService.js');
 const authService = AuthService.getInstance();
@@ -16,16 +16,16 @@ class AuthController {
         }
     }
 
-    static async loginShelter(req, res) {
-        const { email, password } = req.body;
+    // static async loginShelter(req, res) {
+    //     const { email, password } = req.body;
 
-        try {
-            const login = await authService.login(shelters, email, password);
-            res.status(200).send(login);
-        } catch (err) {
-            res.status(401).send('email ou senha inválidos.');
-        }
-    }
+    //     try {
+    //         const login = await authService.login(shelters, email, password);
+    //         res.status(200).send(login);
+    //     } catch (err) {
+    //         res.status(401).send('email ou senha inválidos.');
+    //     }
+    // }
 
 }
 

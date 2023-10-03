@@ -32,6 +32,20 @@ class UserController {
         }
     }
 
+    static async getUserByType(req, res) {
+        try {
+            const { accountType } = req.params;
+            const result = await usersService.getUserByAccountType(accountType);
+            if (result !== null) {
+                res.status(200).send(result);
+            } else {
+                res.status(422).send(`nenhum usuario do tipo ${accountType} encontrado.`)
+            }
+        } catch (error) {
+            res.status(500).send(`${error.message} - erro ao encontrar usuario por tipo de conta`);
+        }
+    }
+
     static async createUser(req, res) {
         try {
             const { email, password } = req.body;
