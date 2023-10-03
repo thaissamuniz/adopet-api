@@ -13,6 +13,19 @@ class Utils {
         return await hash(password, salt);
     }
 
+    static isAdmin(user) {
+        if (this.userHasPermission(user)) {
+            return next();
+        }
+        return 'acesso negado.'
+    }
+
+    static userHasPermission(user) {
+        if (user && user.role == 'admin') {
+            return true;
+        }
+        return false;
+    }
 }
 
 module.exports = Utils;

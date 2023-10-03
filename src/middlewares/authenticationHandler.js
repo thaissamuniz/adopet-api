@@ -10,7 +10,8 @@ function authenticationHandler(req, res, next) {
 
     try {
         const secret = process.env.SECRET;
-        verify(acessToken, secret);
+        const infos = verify(acessToken, secret);
+        req.user = infos.id;
         next();
     } catch (err) {
         res.status(401).send('você não tem permissão para acessar essa página.')

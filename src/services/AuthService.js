@@ -31,7 +31,8 @@ class AuthService {
         try {
             const secret = process.env.SECRET;
             const token = sign({
-                id: user._id
+                id: user._id,
+                role: user.role
             },
                 secret,
                 {
