@@ -2,12 +2,11 @@ const { verify } = require("jsonwebtoken");
 
 function authenticationHandler(req, res, next) {
     const token = req.headers.authorization;
-    const [, acessToken] = token.split(" ");
-
     if (!token) {
         return res.status(401).send('acesso negado.');
     }
 
+    const [, acessToken] = token.split(" ");
     try {
         const secret = process.env.SECRET;
         const infos = verify(acessToken, secret);

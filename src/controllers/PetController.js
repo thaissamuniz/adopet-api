@@ -6,13 +6,14 @@ const adoptionsService = AdoptionsServices.getInstance(adoptions);
 const petsService = PetsService.getInstance(pets);
 
 class PetController {
-    static async getPets(req, res) {
+    static async getPets(req, res, next) {
         try {
-            const result = await petsService.getAllPets();
+            const result = petsService.getAllPets();
             if (result.length == 0) {
                 res.send('nenhum animal cadastrado');
             } else if (result !== null) {
-                res.status(200).json(result);
+                req.resultado = result;
+                next();
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao recuperar os dados`);
@@ -42,7 +43,6 @@ class PetController {
                 res.status(422).send('animal não encontrado.')
             }
         } catch (error) {
-            // res.status(500).send(`${error.message} - erro ao procurar animal por id`);
             next(error)
         }
     }
@@ -52,7 +52,6 @@ class PetController {
             const petResult = await petsService.createPet(req.body);
             res.status(201).send(petResult.toJSON())
         } catch (error) {
-            // res.status(500).send(`${error.message} - erro no post`);
             next(error)
         }
     }

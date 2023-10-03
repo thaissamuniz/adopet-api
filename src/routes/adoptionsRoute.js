@@ -4,8 +4,11 @@ const AdoptionController = require('../controllers/AdoptionController');
 const authenticationHandler = require('../middlewares/authenticationHandler');
 const authorization = require('../middlewares/authorization');
 
+router.use(authenticationHandler);
+router.use(authorization);
+
 router
-    .get('/adoptions', authenticationHandler, authorization, AdoptionController.getAdoptions)
+    .get('/adoptions', AdoptionController.getAdoptions)
     .post('/adoptions', AdoptionController.createAdoption)
     .delete('/adoptions/:id', AdoptionController.deleteAdoption)
 

@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const PetController = require('../controllers/PetController');
+const paginate = require('../middlewares/pagination.js');
 
 router
-    .get('/pets', PetController.getPets)
+    .get('/pets', PetController.getPets, paginate)
     .get('/pets-available', PetController.getAvailablePets)
     .get('/pets/:id', PetController.getPetById)
     .post('/pets', PetController.createPet)
