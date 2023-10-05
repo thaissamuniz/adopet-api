@@ -1,6 +1,6 @@
 async function paginate(req, res, next) {
     try {
-        let { offsetLimit = 5, page = 1, orderField = "_id", order = 1 } = req.query;
+        let { offsetLimit = 9, page = 1, orderField = "_id", order = 1 } = req.query;
         offsetLimit = parseInt(offsetLimit);
         page = parseInt(page);
         order = parseInt(order);

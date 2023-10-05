@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PetController = require('../controllers/PetController');
-const paginate = require('../middlewares/pagination.js');
+const paginate = require('../middlewares/paginate.js');
 
 router
     .get('/pets', PetController.getPets, paginate)
