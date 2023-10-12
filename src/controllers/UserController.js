@@ -1,6 +1,6 @@
 const { users } = require('../models');
 const UsersService = require('../services/UsersServices');
-const { checkEmail, hashPassword } = require('../services/Utils');
+const { checkEmail, hashPassword } = require('../utils/Utils');
 const usersService = UsersService.getInstance(users);
 
 class UserController {
