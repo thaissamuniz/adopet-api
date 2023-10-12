@@ -1,16 +1,17 @@
-const users = require('../models/User.js');
 const AuthService = require('../services/AuthService.js');
 const authService = AuthService.getInstance();
 
 class AuthController {
     static async loginUser(req, res) {
-        const { email, password } = req.body;
-
         try {
-            const login = await authService.login(users, email, password);
-            res.status(200).send(login);
+            const { email, password } = req.body;
+            const login = await authService.login(email, password);
+            if (login) {
+                return res.status(200).send(login);
+            }
+            return res.status(401).send('email ou senha inválidos.');
         } catch (err) {
-            res.status(401).send('email ou senha inválidos.');
+            res.status(500).send(`${err.message} - email ou senha inválidos.`);
         }
     }
 }

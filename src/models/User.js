@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema(
         },
         tel: {
             type: String,
-            required: [true, 'numero é obrigatório'],
             validate: {
                 validator: function (tel) {
                     return /^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})\-?(\d{4}))$/.test(tel)
@@ -34,12 +33,10 @@ const userSchema = new mongoose.Schema(
         },
         city: {
             type: String,
-            required: [true, 'cidade é obrigatória'],
             minlength: 5
         },
         state: {
             type: String,
-            required: [true, 'estado é obrigatório'],
             maxlength: [2, 'digite apenas a sigla do estado']
         },
         accountType: {
@@ -52,7 +49,8 @@ const userSchema = new mongoose.Schema(
             enum: ['user', 'admin', 'manager'],
             ref: 'roles',
             required: [true, 'defina uma role']
-        }
+        },
+        about: String
     }
 )
 

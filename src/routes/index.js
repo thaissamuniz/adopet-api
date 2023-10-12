@@ -10,9 +10,9 @@ const routes = (app) => {
     app.use(
         express.json(),
         users,
+        auth,
         pets,
         adoptions,
-        auth,
         roles
     )
 }
