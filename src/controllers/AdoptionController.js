@@ -32,10 +32,9 @@ class AdoptionController {
         }
     }
 
-    static async deleteAdoption(req, res, next) {
+    static async deleteAdoption(req, res) {
         try {
             const { id } = req.params;
-            console.log(req.body);
             const result = await adoptionsService.deleteAdoption(id);
             if (result !== null) {
                 res.status(200).send({ message: 'adoção apagada com sucesso.' })
