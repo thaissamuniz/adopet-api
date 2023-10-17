@@ -10,13 +10,14 @@ class PetController {
         try {
             const result = petsService.getAllPets();
             if (result.length == 0) {
-                res.send('nenhum animal cadastrado');
-            } else if (result !== null) {
-                req.resultado = result;
-                next();
+                res.status(422).send('nenhum animal cadastrado');
+                return
             }
+
+            req.resultado = result;
+            next();
         } catch (error) {
-            res.status(500).send(`${error.message} - erro ao recuperar os dados`);
+            next(error)
         }
     }
 
@@ -24,7 +25,7 @@ class PetController {
         try {
             const result = await petsService.getAvailable();
             if (result.length == 0) {
-                res.send('não há animais disponiveis para adoção.')
+                res.status(422).send('não há animais disponiveis para adoção.')
             } else if (result !== null) {
                 res.status(200).json(result);
             }
@@ -38,10 +39,10 @@ class PetController {
             const { id } = req.params;
             const pet = await petsService.getPetById(id)
             if (pet !== null) {
-                res.status(200).send(pet)
-            } else {
-                res.status(422).send('animal não encontrado.')
+                return res.status(200).send(pet);
             }
+            res.status(422).send('animal não encontrado.');
+            return
         } catch (error) {
             next(error)
         }
@@ -57,7 +58,7 @@ class PetController {
     }
 
 
-    static async updatePet(req, res) {
+    static async updatePet(req, res, next) {
         try {
             const { id } = req.params;
             const updatedData = await petsService.updatePet(id, req.body);
@@ -67,25 +68,25 @@ class PetController {
                 }
                 res.status(200).send({ message: 'animal atualizado com sucesso' })
             } else {
-                res.send({ message: 'animal não localizado.' })
+                res.status(422).send({ message: 'animal não localizado.' })
             }
 
         } catch (error) {
-            res.status(500).send(`${error.message} - erro ao atualizar animal`);
+            next(error);
         }
     }
 
-    static async deletePet(req, res) {
+    static async deletePet(req, res, next) {
         try {
             const { id } = req.params;
             const pet = await petsService.deletePet(id);
             if (pet !== null) {
                 res.status(200).send({ message: 'animal apagado com sucesso.' });
             } else {
-                res.send('animal não localizado');
+                res.status(422).send({ message: 'animal não localizado.' });
             }
         } catch (error) {
-            res.status(500).send(`${error.message} - erro ao deletar animal`);
+            next(error);
         }
     }
 }
