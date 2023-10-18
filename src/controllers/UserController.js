@@ -1,6 +1,6 @@
 const { users } = require('../models');
 const UsersService = require('../services/UsersServices');
-const { checkEmail, hashPassword } = require('../utils/Utils');
+const Utils = require('../utils/Utils');
 const usersService = UsersService.getInstance(users);
 
 class UserController {
@@ -9,7 +9,7 @@ class UserController {
             const result = await usersService.getAllUsers();
 
             if (result.length == 0) {
-                res.send('nenhum usuario cadastrado.');
+                res.status(422).send('nenhum usuario cadastrado.');
             } else if (result !== null) {
                 res.status(200).json(result)
             }
@@ -49,12 +49,12 @@ class UserController {
     static async createUser(req, res) {
         try {
             const { email, password } = req.body;
-            const emailAlreadyExists = await checkEmail(email, users)
+            const emailAlreadyExists = await Utils.checkEmail(email);
 
             if (emailAlreadyExists) {
                 res.status(401).send('email já cadastrado');
             } else {
-                req.body.password = await hashPassword(password);
+                req.body.password = await Utils.hashPassword(password);
                 const userResult = await usersService.createUser(req.body);
                 res.status(201).send(userResult.toJSON());
             }
@@ -85,9 +85,9 @@ class UserController {
             const { id } = req.params;
             const user = await usersService.deleteUser(id);
             if (user !== null) {
-                res.status(200).send({ message: 'usuario apagadp com sucesso.' });
+                res.status(200).send('usuario apagado com sucesso.');
             } else {
-                res.send('usuario não localizado.')
+                res.status(422).send('usuario não localizado.')
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao deletar usuario`);

@@ -1,8 +1,9 @@
 const { genSalt, hash } = require("bcrypt");
+const { users } = require("../models");
 
 class Utils {
-    static async checkEmail(email, db) {
-        const registeredEmail = await db.findOne({ email: email });
+    static async checkEmail(email) {
+        const registeredEmail = await users.findOne({ email: email });
         if (registeredEmail) {
             return true
         }
