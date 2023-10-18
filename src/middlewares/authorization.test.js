@@ -5,13 +5,13 @@ const authorization = require("./authorization");
 
 describe("authorization", () => {
     const mockedUser = jest.mocked(users);
-    const res = {
-        status: jest.fn(() => res),
-        send: jest.fn()
-    };
-    const mockNext = jest.fn();
 
     test('deve retornar undefined se o usuario tiver role admin', async () => {
+        const res = {
+            status: jest.fn(() => res),
+            send: jest.fn()
+        };
+        const mockNext = jest.fn();
         const req = { user: 1 }
         const mockValue = { role: "admin" }
         mockedUser.findById.mockResolvedValue(mockValue);
@@ -21,7 +21,17 @@ describe("authorization", () => {
     });
 
     test('deve retornar status 403 se o usuario não tiver a role admin', async () => {
-        const req = { user: 1 }
+        const res = {
+            status: jest.fn(() => res),
+            send: jest.fn()
+        };
+        const mockNext = jest.fn();
+        const req = {
+            user: {
+                id: 1,
+                role: "user"
+            }
+        }
         const mockValue = { role: "user" }
         mockedUser.findById.mockResolvedValue(mockValue);
 
@@ -34,6 +44,11 @@ describe("authorization", () => {
 
 
     test('deve retornar status code 500 quando algo da errado no bloco try', async () => {
+        const res = {
+            status: jest.fn(() => res),
+            send: jest.fn()
+        };
+        const mockNext = jest.fn();
         const req = { user: "" }
         mockedUser.findById.mockRejectedValue(new Error(""));
 

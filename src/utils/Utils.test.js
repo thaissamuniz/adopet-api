@@ -7,6 +7,6 @@ describe("Utils:userHasPermission", () => {
   });
 
   test('deve retornar falso se o usuario tiver role user', () => {
-    expect(Utils.userHasPermission({ role: "user" })).toBe(true);
+    expect(Utils.userHasPermission({ role: "user" })).toBe(false);
   });
 });
