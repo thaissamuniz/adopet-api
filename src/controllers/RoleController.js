@@ -35,7 +35,7 @@ class RoleController {
         try {
             const { name } = req.body;
 
-            if (await roles.findOne({ name: name })) {
+            if (await rolesService.getRoleByName(name)) {
                 res.status(401).send('role já cadastrada');
                 return;
             } else {
@@ -48,7 +48,6 @@ class RoleController {
     }
 
     static async updateRole(req, res) {
-
         try {
             const { id } = req.params;
             let role = await rolesService.updateRole(id, req.body);
@@ -65,7 +64,6 @@ class RoleController {
     }
 
     static async deleteRole(req, res) {
-
         try {
             const { id } = req.params;
             const role = await rolesService.deleteRole(id);

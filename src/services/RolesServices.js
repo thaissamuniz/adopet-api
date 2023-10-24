@@ -20,6 +20,9 @@ class RolesServices {
     getRoleById(id) {
         return this.crud.getDataById(id);
     }
+    getRoleByName(name) {
+        return this.crud.getByName(name);
+    }
     createRole(adoption) {
         return this.crud.createData(adoption);
     }

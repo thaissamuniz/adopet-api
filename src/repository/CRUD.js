@@ -14,7 +14,9 @@ class CRUD {
     getDataByType(accountType) {
         return this.model.find({ "accountType": accountType });
     }
-
+    getByName(name) {
+        return this.model.findOne({ name: name });
+    }
     createData(datas) {
         let data = new this.model(datas);
         return data.save();
