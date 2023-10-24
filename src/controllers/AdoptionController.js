@@ -1,7 +1,9 @@
 const { adoptions, pets } = require('../models');
 const AdoptionsService = require('../services/AdoptionsServices.js');
+const PetsServices = require('../services/PetsServices');
 
 const adoptionsService = AdoptionsService.getInstance(adoptions);
+const petsService = PetsServices.getInstance(pets);
 
 class AdoptionController {
     static async getAdoptions(req, res) {
@@ -19,13 +21,13 @@ class AdoptionController {
 
     static async createAdoption(req, res) {
         try {
-            var petSelecionado = await pets.findById(req.body.pet);
+            const petSelecionado = await petsService.getPetById(req.body.pet);
             if (petSelecionado.adopted == true) {
                 return res.status(403).send('esse animal já foi adotado');
             }
 
             const adoptionResult = await adoptionsService.createAdoption(req.body);
-            await pets.findByIdAndUpdate(req.body.pet, { adopted: true });
+            await petsService.updatePet(req.body.pet, { adopted: true });
             res.status(201).send(adoptionResult.toJSON());
         } catch (error) {
             res.status(500).send(`${error.message} - erro no post`);
