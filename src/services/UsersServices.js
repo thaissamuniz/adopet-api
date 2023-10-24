@@ -20,8 +20,13 @@ class UsersServices {
     getUserById(id) {
         return this.crud.getDataById(id);
     }
+
     getUserByAccountType(accountType) {
         return this.crud.getDataByType(accountType);
+    }
+
+    getUserByEmail(email) {
+        return this.crud.getDataByEmail(email);
     }
 
     createUser(user) {

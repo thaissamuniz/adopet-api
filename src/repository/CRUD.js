@@ -17,6 +17,9 @@ class CRUD {
     getByName(name) {
         return this.model.findOne({ name: name });
     }
+    getDataByEmail(email) {
+        return this.model.findOne({ email: email });
+    }
     createData(datas) {
         let data = new this.model(datas);
         return data.save();
