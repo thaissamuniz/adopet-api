@@ -183,14 +183,14 @@ describe('PetController:updatePet', () => {
         await PetController.updatePet(req, mockResponse, mockNext);
 
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.send).toHaveBeenCalledWith({ message: 'animal atualizado com sucesso' });
+        expect(mockResponse.send).toHaveBeenCalledWith('animal atualizado com sucesso.');
     });
 
     test('deve retornar uma mensagem dizendo animal não localizado', async () => {
         mockPetService.updatePet = jest.fn().mockResolvedValue(null);
         await PetController.updatePet(req, mockResponse, mockNext);
 
-        expect(mockResponse.send).toHaveBeenCalledWith({ message: 'animal não localizado.' });
+        expect(mockResponse.send).toHaveBeenCalledWith('animal não localizado.');
     });
 
     test('deve chamar o next caso algo de errado no bloco try', async () => {
@@ -221,7 +221,7 @@ describe('PetController:deletePet', () => {
         await PetController.deletePet(req, mockResponse, mockNext);
 
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.send).toHaveBeenCalledWith({ message: 'animal apagado com sucesso.' });
+        expect(mockResponse.send).toHaveBeenCalledWith('animal apagado com sucesso.');
         expect(mockNext).not.toHaveBeenCalled();
 
     });
@@ -231,7 +231,7 @@ describe('PetController:deletePet', () => {
         await PetController.deletePet(req, mockResponse, mockNext);
 
         expect(mockResponse.status).toHaveBeenCalledWith(422);
-        expect(mockResponse.send).toHaveBeenCalledWith({ message: 'animal não localizado.' });
+        expect(mockResponse.send).toHaveBeenCalledWith('animal não localizado.');
         expect(mockNext).not.toHaveBeenCalled();
 
     });

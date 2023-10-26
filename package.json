@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "jest",
+    "test:unit": "jest controllers",
     "test:integration": "jest tests/integration"
   },
   "author": "Thaissa Muniz",

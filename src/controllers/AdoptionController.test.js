@@ -5,14 +5,14 @@ const adoptionsService = AdoptionsService.getInstance(adoptions);
 jest.mock('../models');
 
 const mockedAdoptionsService = jest.mocked(adoptionsService);
-const mockResponse = {
-    status: jest.fn().mockReturnThis(),
-    send: jest.fn(),
-    json: jest.fn()
-};
 
 describe("AdoptionController:getAdoptions", () => {
     test('Deve retornar status 422 e a mensagem apropriada quando não há adoções', async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         mockedAdoptionsService.getAllAdoptions = jest.fn().mockResolvedValue([]);
         await AdoptionsController.getAdoptions(null, mockResponse);
 
@@ -22,6 +22,11 @@ describe("AdoptionController:getAdoptions", () => {
     });
 
     test('Deve retornar as adoções presentes na coleção', async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         mockedAdoptionsService.getAllAdoptions = jest.fn().mockResolvedValue([{}, {}]);
         await AdoptionsController.getAdoptions(null, mockResponse);
 
@@ -31,6 +36,11 @@ describe("AdoptionController:getAdoptions", () => {
     });
 
     test('Deve retornar status 500 caso algo dê erro no bloco try', async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         mockedAdoptionsService.getAllAdoptions = jest.fn().mockRejectedValue(new Error());
         await AdoptionsController.getAdoptions(null, mockResponse);
 
@@ -42,6 +52,11 @@ describe("AdoptionController:createAdoption", () => {
     const mockedPets = jest.mocked(pets);
 
     test("deve retornar 403 caso a propriedade adopted seja true", async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         const req = {
             body: {
                 pet: 1
@@ -61,7 +76,11 @@ describe("AdoptionController:createAdoption", () => {
     });
 
     test("deve retornar 201 e criar uma nova adoção", async () => {
-
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         const req = {
             body: {
                 pet: 1,
@@ -81,6 +100,11 @@ describe("AdoptionController:createAdoption", () => {
     });
 
     test('Deve retornar status 500 caso algo dê erro no bloco try', async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         mockedAdoptionsService.createAdoption = jest.fn().mockRejectedValue(new Error());
         await AdoptionsController.createAdoption(null, mockResponse);
 
@@ -90,6 +114,11 @@ describe("AdoptionController:createAdoption", () => {
 
 describe("AdoptionController:deleteAdoption", () => {
     test("Deve retornar 200 informando sucesso ao apagar uma adoção e uma mensagem de secesso.", async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         const req = {
             params: {
                 id: 1
@@ -99,10 +128,15 @@ describe("AdoptionController:deleteAdoption", () => {
         await AdoptionsController.deleteAdoption(req, mockResponse);
 
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.send).toHaveBeenCalledWith({ message: 'adoção apagada com sucesso.' });
+        expect(mockResponse.send).toHaveBeenCalledWith('adoção apagada com sucesso.');
     });
 
-    test("Deve retornar uma mensagen dizendo que e adoção não foi encontrada", async () => {
+    test("Deve retornar uma mensagem dizendo que e adoção não foi encontrada", async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         const req = {
             params: {
                 id: null
@@ -115,6 +149,11 @@ describe("AdoptionController:deleteAdoption", () => {
     });
 
     test('Deve retornar status 500 caso algo dê erro no bloco try', async () => {
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+            json: jest.fn()
+        };
         mockedAdoptionsService.deleteAdoption = jest.fn().mockRejectedValue(new Error());
         await AdoptionsController.deleteAdoption(null, mockResponse);
 
