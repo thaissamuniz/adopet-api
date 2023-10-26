@@ -23,7 +23,7 @@ class AdoptionController {
         try {
             const petSelecionado = await petsService.getPetById(req.body.pet);
             if (petSelecionado.adopted == true) {
-                return res.status(403).send('esse animal já foi adotado');
+                return res.status(403).send('esse animal já foi adotado.');
             }
 
             const adoptionResult = await adoptionsService.createAdoption(req.body);
@@ -39,7 +39,7 @@ class AdoptionController {
             const { id } = req.params;
             const result = await adoptionsService.deleteAdoption(id);
             if (result !== null) {
-                res.status(200).send({ message: 'adoção apagada com sucesso.' })
+                res.status(200).send('adoção apagada com sucesso.')
             } else {
                 res.send('adoção não encontrada.')
             }

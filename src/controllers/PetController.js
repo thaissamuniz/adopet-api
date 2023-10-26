@@ -13,7 +13,6 @@ class PetController {
                 res.status(422).send('nenhum animal cadastrado');
                 return
             }
-
             req.resultado = result;
             next();
         } catch (error) {
@@ -61,14 +60,15 @@ class PetController {
     static async updatePet(req, res, next) {
         try {
             const { id } = req.params;
+            const currentyAdoptionState = req.body.adopted;
             const updatedData = await petsService.updatePet(id, req.body);
             if (updatedData !== null) {
-                if (req.body.adopted == true) {
+                if (currentyAdoptionState == false && req.body.adopted == true) {
                     await adoptionsService.createAdoption({ pet: id, user: "64c0134e556c5354ff41004e" })
                 }
-                res.status(200).send({ message: 'animal atualizado com sucesso' })
+                res.status(200).send('animal atualizado com sucesso.')
             } else {
-                res.status(422).send({ message: 'animal não localizado.' })
+                res.status(422).send('animal não localizado.')
             }
 
         } catch (error) {
@@ -81,9 +81,9 @@ class PetController {
             const { id } = req.params;
             const pet = await petsService.deletePet(id);
             if (pet !== null) {
-                res.status(200).send({ message: 'animal apagado com sucesso.' });
+                res.status(200).send('animal apagado com sucesso.');
             } else {
-                res.status(422).send({ message: 'animal não localizado.' });
+                res.status(422).send('animal não localizado.');
             }
         } catch (error) {
             next(error);
