@@ -2,6 +2,11 @@ const { adoptions, pets } = require('../models');
 const AdoptionsService = require('../services/AdoptionsServices.js');
 const AdoptionsController = require('./AdoptionController');
 const adoptionsService = AdoptionsService.getInstance(adoptions);
+
+const PetsServices = require('../services/PetsServices');
+const petsService = PetsServices.getInstance(pets);
+const mockedPetsServices = jest.mocked(petsService);
+
 jest.mock('../models');
 
 const mockedAdoptionsService = jest.mocked(adoptionsService);
@@ -49,8 +54,6 @@ describe("AdoptionController:getAdoptions", () => {
 });
 
 describe("AdoptionController:createAdoption", () => {
-    const mockedPets = jest.mocked(pets);
-
     test("deve retornar 403 caso a propriedade adopted seja true", async () => {
         const mockResponse = {
             status: jest.fn().mockReturnThis(),
@@ -67,12 +70,12 @@ describe("AdoptionController:createAdoption", () => {
             age: "",
             adopted: true
         }
-        mockedPets.findById.mockResolvedValue(pet);
+        mockedPetsServices.getPetById = jest.fn().mockResolvedValue(pet);
 
         await AdoptionsController.createAdoption(req, mockResponse);
 
         expect(mockResponse.status).toHaveBeenCalledWith(403);
-        expect(mockResponse.send).toHaveBeenCalledWith('esse animal já foi adotado');
+        expect(mockResponse.send).toHaveBeenCalledWith('esse animal já foi adotado.');
     });
 
     test("deve retornar 201 e criar uma nova adoção", async () => {
@@ -90,9 +93,9 @@ describe("AdoptionController:createAdoption", () => {
             }
         }
 
-        mockedPets.findById.mockResolvedValue(req.body.pet);
+        mockedPetsServices.getPetById = jest.fn().mockResolvedValue(req.body);
 
-        mockedAdoptionsService.createAdoption = jest.fn().mockResolvedValue(req.body)
+        mockedAdoptionsService.createAdoption = jest.fn().mockResolvedValue(req.body);
         await AdoptionsController.createAdoption(req, mockResponse);
 
         expect(mockedAdoptionsService.createAdoption).toHaveBeenCalled();
