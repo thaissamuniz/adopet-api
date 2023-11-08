@@ -44,7 +44,9 @@ class AuthService {
                 "name": user.name,
                 "tel": user.tel,
                 "city": user.city,
-                "about": user.about
+                "about": user.about,
+                "role": user.role,
+                "image": user.picture
             };
 
         } catch (err) {

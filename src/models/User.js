@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
     {
+        picture: String,
         name: {
             type: String,
             required: [true, 'o nome é obrigatório'],

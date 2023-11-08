@@ -2,6 +2,7 @@ const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
 const petSchema = new mongoose.Schema({
+    image: String,
     name: {
         type: String,
         required: [true, 'nome obrigatorio']
@@ -33,7 +34,7 @@ const petSchema = new mongoose.Schema({
     },
     adopted: {
         type: Boolean,
-        required: [true, 'o campo adotado é obrigatorio']
+        default: false
     },
     shelter: {
         type: mongoose.Schema.Types.ObjectId,
