@@ -4,6 +4,8 @@ const routes = require('./routes/index.js');
 const dbConnect = require('./config/dbConnect.js');
 const notFoundHandler = require('./middlewares/notFoundHandler.js');
 const errorHandler = require('./middlewares/errorsHandler.js');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
 
 async function createApp(uri) {
     const db = await dbConnect(uri)
@@ -14,7 +16,7 @@ async function createApp(uri) {
     const app = express();
     app.use(cors());
     app.use(express.json());
-
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
     routes(app);
 
     app.use(notFoundHandler);

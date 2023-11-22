@@ -39,9 +39,9 @@ class AdoptionController {
             const { id } = req.params;
             const result = await adoptionsService.deleteAdoption(id);
             if (result !== null) {
-                res.status(200).send('adoção apagada com sucesso.')
+                res.status(200).send('adoção apagada com sucesso.');
             } else {
-                res.send('adoção não encontrada.')
+                res.status(422).send('adoção não encontrada.');
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao deletar adoção`);

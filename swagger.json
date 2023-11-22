@@ -1,0 +1,931 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AdoPet API",
+        "description": "Essa API foi desenvolvida para aproximar tutures e ONGs com o objetivo de facilitar para quem quer adotar e para quem tem um bichinho que esteja esperando para ser adotado.",
+        "contact": {
+            "email": "thaiissa.muniiz@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/login/user": {
+            "post": {
+                "description": "faz login no sistema",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "description": "dados necessários para fazer login",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestAuth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseAuth"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "description": "cria um novo usuario.",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "description": "dados necessarios para criar um novo usuario",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "description": "todos os usuarios cadastrados.",
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseUser"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "retorna usuario do id passado",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do usuario",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUser"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "no content"
+                    }
+                }
+            },
+            "put": {
+                "description": "edita um usuario",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do usuario",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "description": "dados necessarios para editar um o usuario",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    },
+                                    "accountType": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "not found"
+                    }
+                }
+            },
+            "delete": {
+                "description": "apaga um usuario",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do usuario",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/users/accountType/{accountType}": {
+            "get": {
+                "description": "retorna todos os usuarios com um tipo de conta especifico.",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "accountType",
+                        "in": "path",
+                        "description": "tipo de conta do usuario",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseUser"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "no content"
+                    }
+                }
+            }
+        },
+        "/pets": {
+            "post": {
+                "description": "cria um novo pet.",
+                "tags": [
+                    "Pets"
+                ],
+                "requestBody": {
+                    "description": "dados necessarios para criar um novo pet",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestPet"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "description": "retorna todos os pets cadastrados.",
+                "tags": [
+                    "Pets"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponsePet"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/{id}": {
+            "get": {
+                "description": "retorna o animal do id passado",
+                "tags": [
+                    "Pets"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do animal",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponsePet"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "put": {
+                "description": "edita um animal",
+                "tags": [
+                    "Pets"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do animal",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "description": "dados do animal que podem ser editados",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "age": {
+                                        "type": "string"
+                                    },
+                                    "size": {
+                                        "enum": [
+                                            "grande",
+                                            "médio",
+                                            "pequeno"
+                                        ],
+                                        "example": "pequeno"
+                                    },
+                                    "details": {
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "type": "string"
+                                    },
+                                    "state": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "description": "apaga um animal",
+                "tags": [
+                    "Pets"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do animal",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/pets-available": {
+            "get": {
+                "description": "retorna os animais disponiveis pra adoção.",
+                "tags": [
+                    "Pets"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponsePet"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/adoptions": {
+            "get": {
+                "description": "retorna todas as adoções já realizadas.",
+                "tags": [
+                    "Adoptions"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseAdoption"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "description": "cria uma nova adoção.",
+                "tags": [
+                    "Adoptions"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "dados necessarios para criar uma nova adoção",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestAdoption"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/adoptions/{id}": {
+            "delete": {
+                "description": "apaga uma adoção",
+                "tags": [
+                    "Adoptions"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id da adoção.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/roles": {
+            "get": {
+                "description": "retorna todas as roles cadastradas.",
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResponseRole"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "description": "cria uma nova role.",
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "dados necessarios para criar uma nova role",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestRole"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/roles/{id}": {
+            "get": {
+                "description": "retorna a role do id passado",
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id da role",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseRole"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "put": {
+                "description": "edita uma role",
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id da role",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "description": "dados do animal que podem ser editados",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "description": "apaga uma role",
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id da role.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RequestUser": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Jhon"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "jhon@user.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "user"
+                    },
+                    "accountType": {
+                        "enum": [
+                            "tutor",
+                            "abrigo"
+                        ],
+                        "example": "tutor"
+                    }
+                }
+            },
+            "ResponseUser": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Jhon"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "jhon@user.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "user"
+                    },
+                    "accountType": {
+                        "enum": [
+                            "tutor",
+                            "abrigo"
+                        ],
+                        "example": "tutor"
+                    }
+                }
+            },
+            "RequestPet": {
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "example": "https://raw.githubusercontent.com/thaissamuniz/AdoPet/d25051f63d3fb0b03151ae829a59d6877504dfb0/assets/img/pets/Imagem%20Dunga.svg"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Siri"
+                    },
+                    "age": {
+                        "type": "string",
+                        "example": "1 ano"
+                    },
+                    "size": {
+                        "enum": [
+                            "grande",
+                            "médio",
+                            "pequeno"
+                        ],
+                        "example": "pequeno"
+                    },
+                    "details": {
+                        "type": "string",
+                        "example": "calma e carinhosa"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Rio de Janeiro"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "RJ"
+                    },
+                    "shelter": {
+                        "example": "654588658c1845f4abd8da66"
+                    }
+                }
+            },
+            "ResponsePet": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "example": "654586228c1845f4abd8da49"
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "https://raw.githubusercontent.com/thaissamuniz/AdoPet/d25051f63d3fb0b03151ae829a59d6877504dfb0/assets/img/pets/Imagem%20Dunga.svg"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Dunga"
+                    },
+                    "age": {
+                        "type": "string",
+                        "example": "1 ano"
+                    },
+                    "size": {
+                        "enum": [
+                            "grande",
+                            "médio",
+                            "pequeno"
+                        ],
+                        "example": "pequeno"
+                    },
+                    "details": {
+                        "type": "string",
+                        "example": "calmo e carinhoso"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Rio de Janeiro"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "RJ"
+                    },
+                    "adopted": false,
+                    "shelter": {
+                        "example": "654588658c1845f4abd8da66"
+                    }
+                }
+            },
+            "ResponseAdoption": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "example": "65382ea48f917296f96e3d79"
+                    },
+                    "pet": {
+                        "example": ""
+                    },
+                    "user": {
+                        "example": ""
+                    },
+                    "adoptionDate": {
+                        "example": "2023-10-24T20:52:52.631Z"
+                    }
+                }
+            },
+            "RequestAdoption": {
+                "type": "object",
+                "properties": {
+                    "pet": {
+                        "example": "654586228c1845f4abd8da49"
+                    },
+                    "user": {
+                        "example": "652450748358018d5aeab5d4"
+                    }
+                }
+            },
+            "ResponseRole": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "example": "651ace10c01f374b16b253f6"
+                    },
+                    "name": {
+                        "example": "admin"
+                    },
+                    "description": {
+                        "example": "tem acesso a todos os recursos"
+                    }
+                }
+            },
+            "RequestRole": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "tem acesso a todos os recursos"
+                    }
+                }
+            },
+            "RequestAuth": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "admin@admin.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "123456"
+                    }
+                }
+            },
+            "ResponseAuth": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "example": "LovePets"
+                    },
+                    "tel": {},
+                    "city": {},
+                    "about": {},
+                    "role": {},
+                    "image": {}
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "description": "autenticacao utilizando JWT",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

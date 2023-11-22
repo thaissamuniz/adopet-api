@@ -25,7 +25,7 @@ class UserController {
             if (user !== null) {
                 res.status(200).send(user);
             } else {
-                res.status(422).send('usuario não encontrado.')
+                res.status(204).send('usuario não encontrado.')
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao procurar usuario por id`);
@@ -39,7 +39,7 @@ class UserController {
             if (result !== null) {
                 res.status(200).send(result);
             } else {
-                res.status(422).send(`nenhum usuario do tipo ${accountType} encontrado.`)
+                res.status(204).send(`nenhum usuario do tipo ${accountType} encontrado.`)
             }
         } catch (error) {
             res.status(500).send(`${error.message} - erro ao encontrar usuario por tipo de conta`);
